@@ -6,6 +6,7 @@
 // #define MAX_FILE_LENGTH
 
 int main(int argc, char *argv[]){
+<<<<<<< HEAD
 	
 	printf("Program name: %s\n", argv[0]);	// name of executable as first argument
 	
@@ -55,4 +56,9 @@ int main(int argc, char *argv[]){
 
 	free(stArr);	
 	return 0;
+=======
+	// This is a comment
+  // This is another comment
+  return 0;
+>>>>>>> origin/master
 }
