@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
     fileName = argv[2];
     if (argv[1][0] == '-'){ // looks for the dash sign
       int key = -strtol(argv[1], NULL, 10); // covert string to int, base 10
-      printf("%d", key);
+      printf("sort key = %d\n", key);
     }
     else{ // else: not enough parameters have been passed || more than expected
       fprintf(stderr, "Error: Bad command line parameters\n"); // send the error message to standard error
@@ -34,8 +34,8 @@ int main(int argc, char *argv[]){
   int fileLength = ftell(file); // get current file pointer
   fseek(file, 0, SEEK_SET); // seek back to beginning of file
 
-  char **strArr = (char **) malloc(fileLength);
-  char *strLine = (char *) malloc(MAX_LINE_LENGTH);
+  char **strArr = (char **) malloc(sizeof(char*) * fileLength);
+  char *strLine = (char *) malloc(sizeof(char*) * (MAX_LINE_LENGTH));
   int i = 0;
   while(1){
     if(i >= fileLength)	{
