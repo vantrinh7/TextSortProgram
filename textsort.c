@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #define MAX_LINE_LEN 128
 #define MAX_FILE_LEN 50
+
+int key = 0;  // default key to sort upon - the first word in each line
 
 //  do the pairwise comparison of values in the array
 int compare(const void *elem1, const void *elem2) {
@@ -15,7 +16,7 @@ int compare(const void *elem1, const void *elem2) {
   char *str1 = *strptr1;
   char *str2 = *strptr2;
   // allocates memory for the copy
-  char *str1copy = (char *)malloc(strlen(elem1));
+  char *str1copy = (char *)malloc(strlen(elem1 + 1)); // adds 1 in order to make room for the end-of-string character
   // make a copy of the original line for later use
   strcpy(str1copy, elem1);
   // get the first word from the string, seperated by space character
@@ -42,7 +43,7 @@ int main(int argc, char *argv[]){
   
   char *fileName = NULL; // a pointer to a string containing name of the file
   FILE *file;   // file pointer
-  int key = 0;  // default key to sort upon - the first word in each line
+//  int key = 0;  // default key to sort upon - the first word in each line
   
   if (argc == 2)
     fileName = argv[1];
@@ -85,7 +86,7 @@ int main(int argc, char *argv[]){
       fileLen = fileLen + MAX_FILE_LEN;
       fileArr = (char **) realloc(fileArr, sizeof(char*) * fileLen);
     }
-    fileArr[i] = (char *) malloc(MAX_LINE_LEN);
+    fileArr[i] = (char *) malloc(sizeof(char*) * MAX_LINE_LEN);
     if(fgets(lineArr, MAX_LINE_LEN, file) != NULL)	{
       if(strlen(lineArr) > MAX_LINE_LEN){
         fprintf(stderr, "Line too long");
@@ -103,6 +104,8 @@ int main(int argc, char *argv[]){
     printf("%s\n", fileArr[i]);
   
   free(lineArr);
+  for (int i = 0; i <= fileLen; i++)
+    free(fileArr[i]);
   free(fileArr);
   return 0;
 }
