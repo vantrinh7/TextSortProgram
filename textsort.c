@@ -62,9 +62,9 @@ int main(int argc, char *argv[]){
       }
       strcpy(fileArr[i], lineArr);  // writing content in one line to array
     }
-    else { // reach to the end
+    else  // reach to the end
       break;
-    }
+
     i++;
   }
   fclose(file);
