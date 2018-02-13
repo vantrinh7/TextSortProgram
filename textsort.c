@@ -4,15 +4,15 @@
 
 
 #define MAX_LINE_LEN 128
-#define MAX_FILE_LEN 100
+#define MAX_FILE_LEN 50
 
 int main(int argc, char *argv[]){
   printf("Running program: %s\n", argv[0]); // the name of executable as first argument
-  
+
   char *fileName = NULL; // a pointer to a string containing name of the file
   FILE *file;   // file pointer
   int key = 0;  // default key to sort upon - the first word in each line
-  
+
   if (argc == 2)
     fileName = argv[1];
   // reads through command line arguments
@@ -43,17 +43,18 @@ int main(int argc, char *argv[]){
   fseek(file, 0, SEEK_END);   // seek to end of file
   int fileLen = ftell(file);  // get current file pointer
   fseek(file, 0, SEEK_SET);   // seek back to beginning of file
+  printf("file length = %d\n", fileLen);
 
   char **fileArr = (char **) malloc(sizeof(char*) * fileLen);
-  
+
   char *lineArr = (char *) malloc(sizeof(char*) * (MAX_LINE_LEN));
   int i = 0;
   while(1){
-    if(i >= MAX_FILE_LEN)	{
-      MAX_FILE_LEN += MAX_FILE_LEN;
-      fileArr = (char **) realloc(fileArr, sizeof(char*) * MAX_FILE_LEN);
-    }
-    fileArr[i] = (char *) malloc(MAX_LINE_LEN);
+    // if(i >= MAX_FILE_LEN - 1)	{
+    //   fileLen = fileLen + MAX_FILE_LEN;
+    //   fileArr = (char **) realloc(fileArr, sizeof(char*) * fileLen);
+    // }
+    fileArr[i] = (char *) malloc(sizeof(char*) * MAX_LINE_LEN);
     if(fgets(lineArr, MAX_LINE_LEN, file) != NULL)	{
       if(strlen(lineArr) > MAX_LINE_LEN){
         fprintf(stderr, "Line too long");
@@ -70,6 +71,7 @@ int main(int argc, char *argv[]){
   for (int i = 0; i <= fileLen; i++)
     printf("%s\n", fileArr[i]);
 
+  free(lineArr);
   free(fileArr);
   return 0;
 }
