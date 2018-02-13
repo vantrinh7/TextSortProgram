@@ -50,11 +50,11 @@ int main(int argc, char *argv[]){
   char *lineArr = (char *) malloc(sizeof(char*) * (MAX_LINE_LEN));
   int i = 0;
   while(1){
-    // if(i >= MAX_FILE_LEN - 1)	{
-    //   fileLen = fileLen + MAX_FILE_LEN;
-    //   fileArr = (char **) realloc(fileArr, sizeof(char*) * fileLen);
-    // }
-    fileArr[i] = (char *) malloc(sizeof(char*) * MAX_LINE_LEN);
+     if(i >= MAX_FILE_LEN)  {
+       fileLen = fileLen + MAX_FILE_LEN;
+       fileArr = (char **) realloc(fileArr, sizeof(char*) * fileLen);
+     }
+    fileArr[i] = (char *) malloc(MAX_LINE_LEN);
     if(fgets(lineArr, MAX_LINE_LEN, file) != NULL)	{
       if(strlen(lineArr) > MAX_LINE_LEN){
         fprintf(stderr, "Line too long");
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
       }
       strcpy(fileArr[i], lineArr);  // writing content in one line to array
     }
-    else if(i == fileLen) { // reach to the end
+    else { // reach to the end
       break;
     }
     i++;
