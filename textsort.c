@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define MAX_LINE_LEN 128
-#define MAX_FILE_LEN 50
+#define MAX_FILE_LEN 150
 
 int key = 0;  // default key to sort upon - the first word in each line
 
@@ -78,44 +78,38 @@ int main(int argc, char *argv[]){
   printf("file length = %d\n", fileLen);
 
   char **fileArr = malloc(sizeof(char*) * fileLen);
-  char *lineArr = (char *) malloc(sizeof(char*) * MAX_LINE_LEN);
+  char *lineArr = (char *) malloc(sizeof(char*) * (MAX_LINE_LEN + 1));
 
   int i = 0;
   while(1){
     if(i >= MAX_FILE_LEN)  {
       fileLen = fileLen + MAX_FILE_LEN;
-      fileArr = (char **) realloc(fileArr, sizeof(char*) * fileLen);
+      fileArr = realloc(fileArr, sizeof(char*) * fileLen);
     }
-    char *buffer = (char *) malloc(sizeof(char*) * (MAX_LINE_LEN + 1));
-    fileArr[i] = buffer;
+    fileArr[i] = malloc(sizeof(char*) * (MAX_LINE_LEN + 1));
     if(fgets(lineArr, MAX_LINE_LEN, file) != NULL)	{
       if(strlen(lineArr) > MAX_LINE_LEN){
         fprintf(stderr, "Line too long");
         exit(1);  // exit with return code 1
       }
       strcpy(fileArr[i], lineArr);  // writing content in one line to array
-      buffer = (char *) malloc(sizeof(char*) *  (MAX_LINE_LEN + 1));
     }
-    else  // reach to the end
+    else{  // reach to the end
+      free(fileArr[i]);
       break;
+    }
     i++;
-    free(buffer);
+
   }
   fclose(file);
-  for (int i = 0; i < fileLen; i++){
-    printf("%s \n", fileArr[i]);
-    free(fileArr[i]);
+
+  for (char **a = fileArr; *a; a++){
+    printf("%s\n", *a);
+    free(*a);
     fileArr[i] = NULL;
   }
 
   free(lineArr);
-  // free(buffer);
-
-  // for (int i = 0; i < fileLen; i++){
-  //   free(fileArr[i]);
-  //   fileArr[i] = NULL;
-  // }
-
   free(fileArr);
   return 0;
 }
