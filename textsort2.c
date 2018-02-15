@@ -5,10 +5,12 @@
 #define MAX_LINE_LEN 128
 #define MAX_FILE_LEN 150
 
-int compare(const void *elem1, const void *elem2);
+int compareLines(const void *elem1, const void *elem2);
+int compareString(char *str1, char *str2, int key);
+void sort(char *ptArray[]);
 void printLines (char *ptArray[]);
 
-char line1[] = "bcdea";
+char line1[] = "black sheep";
 char line2[] = "Nate is cute";
 char line3[] = "hi there";
 
@@ -24,16 +26,21 @@ int main(int argc, char *argv[]){
   ptArray[2] = line3;
   /* printf("First element in ptArray is: %s \n", ptArray[0] ); */
   /* printf("Second element in ptArray is: %s \n", ptArray[1]); */
-  printLines(ptArray);
+  //printLines(ptArray);
+  
   // Second parameters is number of characters NOT INCLUDING '\0' in the end
 
-  qsort(ptArray, 3, sizeof(char *), compare);
+  qsort(ptArray, 3, sizeof(char *), compareLines);
   /* printf("After sorting: \n"); */
   /* printf("Line 1 is: %s \n", line1); */
   /* printf("Line 2 is: %s \n", line2); */
-  printLines(ptArray);
+  //printLines(ptArray);
   
   return 0;
+}
+
+void sort(char *ptArray[]) {
+  
 }
 
 int getLineLength(char line[]) {
@@ -47,29 +54,65 @@ int getLineLength(char line[]) {
 }
 
 //  do the pairwise comparison of values in the array
-int compare(const void *elem1, const void *elem2) {
-  printf("Start \n");
-  /* Cast to its actual type */
-  char **strptr1 = (char **) elem1;
-   
+int compareLines(const void *elem1, const void *elem2) {
+
+  char *wordArray1[MAX_LINE_LEN];
+  char *wordArray2[MAX_LINE_LEN];
+  
+  /* Cast parameters to actual type */
+  char **strptr1 = (char **) elem1;  
   char **strptr2 = (char **) elem2;
    
   /* Dereference to get the strings */
   char *str1 = *strptr1;
-
   char *str2 = *strptr2;
 
+  char str1copy[strlen(str1)];
+  char str2copy[strlen(str2)];
    
   // allocates memory for the copy
   // char *str1copy = (char *)malloc(strlen(str1));
+  
   // make a copy of the original line for later use
-  // strcpy(str1copy, str1);
-  // get the first word from the string, seperated by space character
-  // char *chop1 = strtok(str1copy, " ");
- 
+  strcpy(str1copy, str1);
+  
+  // On the first call, string to be parsed should be specified (str1copy)
+  wordArray1[0] = strtok(str1copy, " ");
+   printf("%s \n", wordArray1[0]);
+
+  int i = 0;
+  // On the subsequent calls, str must be NULL. Save words into an array
+  while(wordArray1[i] != NULL){
+    wordArray1[i] = strtok(NULL, " ");
+    i++;
+  }
+  
+  for (int j = 0; j < i-1; j++) {
+    printf("%s \n", wordArray1[j]);
+  }
+
+  // make a copy of the original line for later use
+  strcpy(str2copy, str2);
+  
+  // On the first call, string to be parsed should be specified (str2copy)
+  wordArray2[0] = strtok(str2copy, " ");
+   printf("%s \n", wordArray2[0]);
+
+  int m = 0;
+  // On the subsequent calls, str must be NULL. Save words into an array
+  while(wordArray2[i] != NULL){
+    wordArray2[i] = strtok(NULL, " ");
+    m++;
+  }
+  
+  for (int n = 0; n < m-1; n++) {
+    printf("%s \n", wordArray2[n]);
+  }
+   
   //char *temp1 = NULL;
   //int i = 0; // counter
-  // loops the rest of the line until reaching key
+  //loops the rest of the line until reaching key
+  
   // while( i <= key && (chop1 != NULL ))  {
   //  while ((word = strtok(NULL, " ")) != NULL)
   //    printf("Next: %s\n", word);
@@ -81,10 +124,11 @@ int compare(const void *elem1, const void *elem2) {
   
   //  To chop lines into words, you can use strtok(). Be careful, though; it is destructive and will change the contents of the lines. Thus, if you use it, make sure to make a copy of the original line for later use.
 
-  // Use the pointers, not the strings themselves for strcmp function
-  int i = strcmp(str1, str2);
-  printf("Compare function result: %d \n", i);
-  return i;
+  // Use the strings for strcmp function
+  int result  = strcmp(str1, str2);
+  
+  //printf("Compare function result: %d \n", result);
+  return result;
 }
 
 void printLines (char *ptArray[]) {
