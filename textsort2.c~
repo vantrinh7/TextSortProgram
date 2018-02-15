@@ -1,0 +1,35 @@
+#include <stdio.h>
+
+int main(int argc, char *argv[]){
+  return 0;
+}
+
+//  do the pairwise comparison of values in the array
+int compare(const void *elem1, const void *elem2) {
+  /* Cast to its actual type. */
+  char **strptr1 = (char **) elem1;
+  char **strptr2 = (char **) elem2;
+  /* Dereference to get the strings */
+  char *str1 = *strptr1;
+  char *str2 = *strptr2;
+  // allocates memory for the copy
+  char *str1copy = (char *)malloc(strlen(elem1));
+  // make a copy of the original line for later use
+  strcpy(str1copy, elem1);
+  // get the first word from the string, seperated by space character
+  char *chop1 = strtok(str1copy, " ");
+  
+  char *temp1 = NULL;
+  int i = 0; // counter
+  // loops the rest of the line until reaching key
+  // while( i <= key && (chop1 != NULL ))  {
+    //  while ((word = strtok(NULL, " ")) != NULL)
+    //    printf("Next: %s\n", word);
+  //}
+  /* Then use strcmp to compare the strings */
+  
+  //  To compare strings, use the strcmp() function.
+  
+  //  To chop lines into words, you can use strtok(). Be careful, though; it is destructive and will change the contents of the lines. Thus, if you use it, make sure to make a copy of the original line for later use.
+  
+}
