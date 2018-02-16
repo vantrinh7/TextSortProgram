@@ -4,4 +4,7 @@ textsort: textsort.c
 textsort2: textsort2.c
 	gcc -g -Wall -o textsort2 textsort2.c
 
-all: textsort
+textsort3: textsort3.c
+	gcc -g -Wall -o textsort3 textsort3.c
+
+all: textsort 
