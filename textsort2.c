@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #define MAX_LINE_LEN 128
 #define MAX_FILE_LEN 150
 
@@ -10,13 +11,15 @@ int compareWords(char *wordArray1[], char *wordArray2[]);
 void sort(char *ptArray[]);
 void printLines (char *ptArray[]);
 char* getLastWord(char *wordArray[]);
+bool isBlankLine(char str[]);
 // Methods to count words on line, check lines and print out lines
 int getLineLength(char line[]);
 
 char line1[] = "black yummy wolfberry";
 char line2[] = "Nate is cutie my baby answer me";
 char line3[] = "hi there friend";
-char line4[] = "tell me why";
+char line4[] = "            \0";
+char emptyArray[MAX_LINE_LEN - 1];
 
 // Define an array of pointers, each element points to a char
 char *ptArray[4];
@@ -24,11 +27,12 @@ int key = 7;
 
 
 int main(int argc, char *argv[]){
+
   ptArray[0] = line1;
   ptArray[1] = line2;
   ptArray[2] = line3;
   ptArray[3] = line4;
-
+    
   printLines(ptArray);
   qsort(ptArray, 4, sizeof(char *), compareLines);
   printLines(ptArray);
@@ -44,8 +48,6 @@ int main(int argc, char *argv[]){
  * @return -1, 0 or 1
  **/
 int compareLines(const void *elem1, const void *elem2) {
- 
-  printf("Start trial \n");
   
   // Cast parameters to actual type 
   char **strptr1 = (char **) elem1;  
@@ -69,10 +71,10 @@ int compareLines(const void *elem1, const void *elem2) {
   // char var[] is equivalent to char *var
   char str1copy[length1]; 
   char str2copy[length2];
-  for (int i = 0; i < length1; i++) {
+  for (int i = 0; i < strlen(str1); i++) {
     str1copy[i] = '\0';
   }
-  for (int i = 0; i < length2; i++) {
+  for (int i = 0; i < strlen(str2); i++) {
     str2copy[i] = '\0';
   }
   
@@ -103,42 +105,66 @@ int compareLines(const void *elem1, const void *elem2) {
  * @return -1, 0 or 1
  **/
 int compareStrings(char *str1copy, char *str2copy) {
-  char *wordArray1[MAX_LINE_LEN];
-  char *wordArray2[MAX_LINE_LEN];
+  char *wordArray1[MAX_LINE_LEN - 1];
+  char *wordArray2[MAX_LINE_LEN - 1];
 
   // Initialize arrays with null values
-  for (int i = 0; i < MAX_LINE_LEN; i++) {
+  for (int i = 0; i < MAX_LINE_LEN - 1; i++) {
     wordArray1[i] = NULL;
     wordArray2[i] = NULL;
   }
+
+  // If string 1 is not a blank line, chop up. If it is, give it empty values
+  if (isBlankLine(str1copy) != true) {
+   
+    // On the first call, string to be parsed should be specified 
+    wordArray1[0] = strtok(str1copy, " ");
+    int i = 0;
+    // On the subsequent calls, str must be NULL. Save words into an array
+    while(wordArray1[i] != NULL){
+      i++;
+      wordArray1[i] = strtok(NULL, " ");  
+    }
   
-  // On the first call, string to be parsed should be specified 
-  wordArray1[0] = strtok(str1copy, " ");
-  int i = 0;
-  // On the subsequent calls, str must be NULL. Save words into an array
-  while(wordArray1[i] != NULL){
-    i++;
-    wordArray1[i] = strtok(NULL, " ");  
-  } 
-  for (int j = 0; j < i; j++) {
-    printf("Word at index %d in wordArray1 is: %s \n",j, wordArray1[j]);
+    /* for (int j = 0; j < i; j++) { */
+    /*   printf("Word at index %d in wordArray1 is: %s \n",j, wordArray1[j]); */
+    /* } */    
+  } else {
+     for (int i = 0; i < MAX_LINE_LEN - 1; i++) {
+       wordArray1[i] = " ";
+     }
   }
 
-  // On the first call, string to be parsed should be specified 
-  wordArray2[0] = strtok(str2copy, " ");
-  int m = 0;
-  // On the subsequent calls, str must be NULL. Save words into an array
-  while(wordArray2[m] != NULL){
-    m++;
-    wordArray2[m] = strtok(NULL, " ");  
-  }
-  for (int n = 0; n < m; n++) {
-    printf("Word at index %d in wordArray2 is: %s \n",n , wordArray2[n]);
+   // If string 2 is not a blank line, chop up. If it is, give it empty values
+  if (isBlankLine(str2copy) != true) {  
+    // On the first call, string to be parsed should be specified 
+    wordArray2[0] = strtok(str2copy, " ");
+   
+    int m = 0;
+    // On the subsequent calls, str must be NULL. Save words into an array
+    while(wordArray2[m] != NULL){
+      m++;
+      wordArray2[m] = strtok(NULL, " ");  
+    }
+  } else {
+     for (int i = 0; i < MAX_LINE_LEN - 1; i++) {
+       wordArray2[i] = " ";
+     }
   }
 
   return compareWords(wordArray1, wordArray2);
 }
 
+bool isBlankLine(char str[]) {
+  char *p = str;
+  while(*p) {
+    if ((*p != ' ') && (*p != '\n') && (*p != '\0')) {
+	return false;
+    }
+    p++;
+  }
+  return true;
+}
 
 /**
  * Method to compare words at a certain index (key) in two wordArray
