@@ -1,0 +1,2 @@
+./textsort3 -1 short_alma.txt
+valgrind --leak-check=yes ./textsort3 -1 short_alma.txt
