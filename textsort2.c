@@ -9,7 +9,7 @@ int compareLines(const void *elem1, const void *elem2);
 int compareStrings(char *str1, char *str2);
 int compareWords(char *wordArray1[], char *wordArray2[]);
 void sort(char *ptArray[]);
-void printLines (char *ptArray[]);
+void printLines (char *ptArray[], size_t count);
 char* getLastWord(char *wordArray[]);
 bool isBlankLine(char str[]);
 // Methods to count words on line, check lines and print out lines
@@ -19,24 +19,23 @@ char line1[] = "black yummy wolfberry";
 char line2[] = "Nate is cutie my baby answer me";
 char line3[] = "hi there friend";
 char line4[] = "            \0";
-char emptyArray[MAX_LINE_LEN - 1];
 
 // Define an array of pointers, each element points to a char
-char *ptArray[4];
+
 int key = 7;
 
-
 int main(int argc, char *argv[]){
-
+  char **ptArray = calloc(4, sizeof(char *));
   ptArray[0] = line1;
   ptArray[1] = line2;
   ptArray[2] = line3;
   ptArray[3] = line4;
     
-  printLines(ptArray);
+  printLines(ptArray, 4);
   qsort(ptArray, 4, sizeof(char *), compareLines);
-  printLines(ptArray);
-  
+  printLines(ptArray, 4);
+
+  free(ptArray);
   return 0;
 }
 
@@ -49,15 +48,15 @@ int main(int argc, char *argv[]){
  **/
 int compareLines(const void *elem1, const void *elem2) {
   
-  // Cast parameters to actual type 
-  char **strptr1 = (char **) elem1;  
+  // Cast parameters to actual type
+  char **strptr1 = (char **) elem1;
   char **strptr2 = (char **) elem2;
-   
-  // Dereference to get the strings 
-  char *str1 = *strptr1;
+
+  // Dereference from pointers to get values
+  char *str1 = *strptr1; 
   char *str2 = *strptr2;
 
-  // Check the length of the string & check strlen function
+  // Check the length of the string & check strlen function for error
   int length1;
   int length2;
   if ((strlen(str1) >= 0) && (strlen(str2) >= 0)) {
@@ -67,23 +66,14 @@ int compareLines(const void *elem1, const void *elem2) {
     fprintf(stderr, "Invalid string length\n");
   }
 
-  // Create variables to hold the copies of strings, initialize with NULL values
-  // char var[] is equivalent to char *var
-  char str1copy[length1]; 
-  char str2copy[length2];
-  for (int i = 0; i < strlen(str1); i++) {
-    str1copy[i] = '\0';
-  }
-  for (int i = 0; i < strlen(str2); i++) {
-    str2copy[i] = '\0';
-  }
-  
-  // allocates memory for the copy
-  // char *str1copy = (char *)malloc(strlen(str1));
+  // Allocate memory for the string copies
+  char *str1copy = calloc(length1, sizeof(char *)) ;
+  char *str2copy = calloc(length2, sizeof(char *));
   
   // Make copies from originial strings and check result from strcpy function
   char *destination1 = strcpy(str1copy, str1);
-  char *destination2 = strcpy(str2copy, str2); 
+  char *destination2 = strcpy(str2copy, str2);
+
   int compareResult;
   if ((destination1 != NULL) && (destination2 != NULL)) {
     // If destination pointers are valid, call compareStrings function
@@ -92,7 +82,9 @@ int compareLines(const void *elem1, const void *elem2) {
     fprintf(stderr, "String copy failed\n");
   }
 
-  // Print out result
+  // Free the memory
+  free(str1copy);
+  free(str2copy);
   return compareResult;
 }
 
@@ -105,14 +97,9 @@ int compareLines(const void *elem1, const void *elem2) {
  * @return -1, 0 or 1
  **/
 int compareStrings(char *str1copy, char *str2copy) {
-  char *wordArray1[MAX_LINE_LEN - 1];
-  char *wordArray2[MAX_LINE_LEN - 1];
-
-  // Initialize arrays with null values
-  for (int i = 0; i < MAX_LINE_LEN - 1; i++) {
-    wordArray1[i] = NULL;
-    wordArray2[i] = NULL;
-  }
+  // Allocate memory for the word arrays
+  char **wordArray1 = calloc(MAX_LINE_LEN - 1, sizeof(char *)) ;
+  char **wordArray2 = calloc(MAX_LINE_LEN - 1, sizeof(char *)) ;
 
   // If string 1 is not a blank line, chop up. If it is, give it empty values
   if (isBlankLine(str1copy) != true) {
@@ -124,11 +111,7 @@ int compareStrings(char *str1copy, char *str2copy) {
     while(wordArray1[i] != NULL){
       i++;
       wordArray1[i] = strtok(NULL, " ");  
-    }
-  
-    /* for (int j = 0; j < i; j++) { */
-    /*   printf("Word at index %d in wordArray1 is: %s \n",j, wordArray1[j]); */
-    /* } */    
+    }   
   } else {
      for (int i = 0; i < MAX_LINE_LEN - 1; i++) {
        wordArray1[i] = " ";
@@ -152,9 +135,18 @@ int compareStrings(char *str1copy, char *str2copy) {
      }
   }
 
-  return compareWords(wordArray1, wordArray2);
+  int result = compareWords(wordArray1, wordArray2);
+  
+  free(wordArray1);
+  free(wordArray2);
+  return result;
 }
 
+/**
+ * Method to check if a line is blank. 
+ * @param char str[] the string to be checked
+ * @return false if line is not blank, true otherwise
+ **/
 bool isBlankLine(char str[]) {
   char *p = str;
   while(*p) {
@@ -201,6 +193,8 @@ int compareWords(char *wordArray1[], char *wordArray2[]) {
     printf("Case 4 word2 is: %s \n", word2);
   }
   int result;
+
+  // Handle possible error from strcmp function
   if ((word1 != NULL) && (word2 != NULL)) {
       result = strcmp(word1, word2);
   } else {
@@ -228,9 +222,9 @@ char* getLastWord(char *wordArray[]) {
 }
 
 
-void printLines (char *ptArray[]) {
-  for (char **a = ptArray; *a; a++) {
-    printf("%s\n", *a);
+void printLines (char *ptArray[], size_t count){
+  for (size_t i = 0; i < count; i++) {
+    printf("%s\n", ptArray[i]);
   }
 }
 
