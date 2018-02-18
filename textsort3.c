@@ -73,22 +73,25 @@ int main(int argc, char *argv[]){
  * @return the file name if file name is given
  **/
 char* checkArgs(int argc, char *argv[]) {
-   char *fileName = NULL;
-   if (argc == 2)
+  char *fileName = NULL;
+  if (argc == 2) {
     fileName = argv[1];
-  // reads through command line arguments
+  } 
+  // Reads through command line arguments
   else if (argc == 3){
     fileName = argv[2];
-    if (argv[1][0] == '-'){ // looks for the dash sign
-      key = -strtol(argv[1], NULL, 10) - 1; // coverts string to int, base 10; then convert it to an array position
+    if (argv[1][0] == '-'){ // Looks for the dash sign
+      // Coverts string to int, base 10; then convert it to an array position
+      key = -strtol(argv[1], NULL, 10) - 1; 
     }
-    // else: not enough parameters have been passed || more than expected
+    // Else: not enough parameters have been passed || more than expected
     else{
-      fprintf(stderr, "Error: Bad command line parameters\n"); // send the error message to standard error
+      // Send the error message to standard error
+      fprintf(stderr, "Error: Bad command line parameters\n"); 
       exit(1);	// exit with return code 1
     }
   }
-  // if inputing a null file
+  // If inputing a null file
   if (fileName == NULL) {
     fprintf(stderr, "Error: Bad command line parameters\n");
     exit(1);  // exit with return code 1
@@ -108,16 +111,22 @@ char* checkArgs(int argc, char *argv[]) {
 int readInput(char *fileArr[], char *lineArr, FILE *file) {
   int i = 0;
   while(fgets(lineArr, MAX_LINE_LEN, file) != NULL) {
+    // Check if line is too long
     if(strlen(lineArr) > MAX_LINE_LEN){
       fprintf(stderr, "Line too long");
-      exit(1);  // exit with return code 1
+      exit(1);  // Exit with return code 1
     }
+    // Check for new line character
     if (strchr(lineArr, '\n')) {
-      lineArr[strlen(lineArr) - 1] = '\0';  // removes the new line character
+      lineArr[strlen(lineArr) - 1] = '\0';  
     }
+    // Allocate memory for each element in fileArr
     fileArr[i] = (char *) calloc(MAX_LINE_LEN, sizeof(char));
-    strcpy(fileArr[i], lineArr);  // writing content in one line to the array
 
+    // Writing content in one line to the array
+    strcpy(fileArr[i], lineArr);  
+
+    // Check the allocation
     if (fileArr[i] == NULL) {
       fprintf(stderr, "Error: Memory allocation failed for line %d.\n", i);
       exit(1);
@@ -128,7 +137,7 @@ int readInput(char *fileArr[], char *lineArr, FILE *file) {
 }
 
 /**
- * This method prints out the content of an array 
+ * This method prints out the content of file array 
  *
  * @param char *fileArr[] the file array to be printed
  * @param size_t count the number of lines of the file (not the array size)
@@ -181,10 +190,10 @@ int compareLines(const void *elem1, const void *elem2) {
   } else {
     fprintf(stderr, "String copy failed\n");
   }
-
   // Free the memory
   free(str1copy);
   free(str2copy);
+  
   return compareResult;
 }
 
