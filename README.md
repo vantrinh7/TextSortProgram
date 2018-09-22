@@ -25,3 +25,7 @@ The file is sorted by `qsort()` function in C, which takes in four parameters: t
 - The maximum length of the line in the input file is 128 characters. If a line is longer, the program exits and returns an error.
 - Empty line is sorted using an empty string.
 - If user wants to sort on a certain position (e.g. the 5th position), but a line has a fewer number of words (e.g. "Example line"), then the last word of the sentence is used to sort (in this case, the word "line" is utilized).
+
+## File description
+
+This program was written is C (as shown in [textsort.c](https://github.com/vantrinh7/TextSortProgram/blob/master/textsort.c) and the [makefile](https://github.com/vantrinh7/TextSortProgram/blob/master/makefile)). Two example text files are included for testing purposes ([rose.txt](https://github.com/vantrinh7/TextSortProgram/blob/master/rose.txt) and [tomatoes.txt](https://github.com/vantrinh7/TextSortProgram/blob/master/tomatoes.txt)).
