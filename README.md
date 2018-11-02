@@ -28,4 +28,4 @@ The file is sorted by `qsort()` function in C, which takes in four parameters: t
 
 ## File description
 
-This program was written is C, with the source file [textsort.c](https://github.com/vantrinh7/TextSortProgram/blob/master/textsort.c) and the [makefile](https://github.com/vantrinh7/TextSortProgram/blob/master/makefile)). Two example text files are included for testing purposes ([rose.txt](https://github.com/vantrinh7/TextSortProgram/blob/master/rose.txt) and [tomatoes.txt](https://github.com/vantrinh7/TextSortProgram/blob/master/tomatoes.txt)).
+This program was written is C, with the source file [textsort.c](https://github.com/vantrinh7/TextSortProgram/blob/master/textsort.c) and the [makefile](https://github.com/vantrinh7/TextSortProgram/blob/master/makefile). Two example text files [rose.txt](https://github.com/vantrinh7/TextSortProgram/blob/master/rose.txt) and [tomatoes.txt](https://github.com/vantrinh7/TextSortProgram/blob/master/tomatoes.txt) are included for testing purposes.
