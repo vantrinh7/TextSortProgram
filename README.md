@@ -1,6 +1,6 @@
 # Text Sort Program
 
-This program is a simple version of sorting utility in the Unix operating system. The program can be run from Terminal using the commands: `./textsort filename` or `./textsort -2 filename`. "Filename" is the name of file that contains the text being sorted, and "-2" is an optinal argument that sorts the program based on the 2nd word rather than the first word. Here are some example outputs of the program, as the sentences in one text file are sorted based on words at position 1, 2, 3, etc.:
+This program is a simple version of sorting utility in the Unix operating system. The program can be run from Terminal using the commands: `./textsort filename` or `./textsort -2 filename`. `Filename` is the name of file that contains the text being sorted, and `-2` is an optinal argument that sorts the program based on the 2nd word rather than the first word. Here are some example outputs of the program, as the sentences in one text file are sorted based on words at position 1, 2, 3, etc.:
 
 <br>
 
